@@ -25,6 +25,107 @@
             position: relative;
             overflow-x: hidden;
         }
+
+        /* Welcome Popup Styles */
+        .welcome-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .welcome-popup.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .popup-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 90%;
+            max-height: 90%;
+            width: 400px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transform: scale(0.7);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .welcome-popup.active .popup-content {
+            transform: scale(1);
+        }
+
+        .popup-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--dark-red);
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .popup-close:hover {
+            background: var(--bright-red);
+            transform: rotate(90deg);
+        }
+
+        .popup-footer {
+            padding: 20px;
+            text-align: center;
+            background: linear-gradient(to right, var(--dark-red), var(--deep-red));
+            color: white;
+        }
+
+        .popup-footer h3 {
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .popup-footer p {
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        .popup-btn {
+            background-color: var(--gold);
+            color: var(--dark-red);
+            border: none;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .popup-btn:hover {
+            background-color: white;
+            transform: translateY(-2px);
+        }
         
         /* Background Elements */
         .bg-elements {
@@ -535,6 +636,11 @@
             .bg-element {
                 display: none;
             }
+
+            .popup-content {
+                width: 95%;
+                max-width: 350px;
+            }
         }
         
         @media (max-width: 480px) {
@@ -561,10 +667,34 @@
             .section-title {
                 font-size: 1.5rem;
             }
+
+            .popup-content {
+                width: 90%;
+                max-width: 300px;
+            }
+
+            .popup-footer h3 {
+                font-size: 1.1rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Welcome Popup -->
+    <div class="welcome-popup" id="welcomePopup">
+        <div class="popup-content">
+            <button class="popup-close" id="popupClose">
+                <i class="fas fa-times"></i>
+            </button>
+            <img src="https://image2url.com/images/1763911838218-201f67b7-c9f6-466b-be1c-62cc68b0b858.png" alt="Selamat Datang di Risol Mayo" class="popup-image">
+            <div class="popup-footer">
+                <h3>Selamat Datang!</h3>
+                <p>Nikmati kelezatan risol mayo dengan berbagai varian rasa spesial</p>
+                <button class="popup-btn" id="popupBtn">Lihat Menu</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Background Elements -->
     <div class="bg-elements">
         <div class="bg-element bg-element-1">
@@ -610,8 +740,8 @@
     <div class="promo-slideshow" id="home">
         <div class="slide slide-1 active">
             <h2>Promo Spesial Akhir Tahun!</h2>
-            <p>Dapatkan diskon 20% untuk pembelian minimal 10 pcs risol mayo</p>
-            <div class="promo-price">Hanya Rp 32.000</div>
+            <p>Dapatkan diskon 10% untuk pembelian minimal 10 pcs risol mayo 4k only</p>
+            <div class="promo-price">Hanya Rp 36.000</div>
             <a href="#catalog" class="btn">Pesan Sekarang</a>
         </div>
         <div class="slide slide-2">
@@ -694,7 +824,7 @@
                         <h3 class="product-name">Risol Beef Mayo Bolognese</h3>
                         <p class="product-description">Kombinasi istimewa beef smoke, saos bolognese, keju, dengan saus mayo spesial.</p>
                         <div class="product-price">Rp 5.000 / pcs</div>
-                        <a href="https://wa.me/6285606969929?text=Halo,%20saya%20ingin%20memesan%20Risol%20Mayo%20Special" class="whatsapp-btn" target="_blank">
+                        <a href="https://wa.me/6285606969929?text=Halo,%20saya%20ingin%20memesan%20Risol%20Mayo%20Bolognese" class="whatsapp-btn" target="_blank">
                             <i class="fab fa-whatsapp"></i> Pesan Sekarang
                         </a>
                     </div>
@@ -773,12 +903,58 @@
                     <a href="#"><i class="fab fa-tiktok"></i></a>
                     <a href="https://wa.me/6285606969929"><i class="fab fa-whatsapp"></i></a>
                 </div>
-                <p>&copy; 2023 Risol Mayo. All rights reserved.</p>
+                <p>&copy; 2026 Risol Mayo. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <script>
+        // Welcome Popup Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const welcomePopup = document.getElementById('welcomePopup');
+            const popupClose = document.getElementById('popupClose');
+            const popupBtn = document.getElementById('popupBtn');
+            
+            // Check if popup was already shown in this session
+            const popupShown = sessionStorage.getItem('popupShown');
+            
+            if (!popupShown) {
+                // Show popup after 1 second
+                setTimeout(() => {
+                    welcomePopup.classList.add('active');
+                    // Disable body scroll when popup is open
+                    document.body.style.overflow = 'hidden';
+                }, 1000);
+                
+                // Mark as shown for this session
+                sessionStorage.setItem('popupShown', 'true');
+            }
+            
+            // Close popup when X button is clicked
+            popupClose.addEventListener('click', function() {
+                welcomePopup.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            });
+            
+            // Close popup and scroll to catalog when button is clicked
+            popupBtn.addEventListener('click', function() {
+                welcomePopup.classList.remove('active');
+                document.body.style.overflow = 'auto';
+                // Scroll to catalog section
+                document.getElementById('catalog').scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+            
+            // Close popup when clicking outside the content
+            welcomePopup.addEventListener('click', function(e) {
+                if (e.target === welcomePopup) {
+                    welcomePopup.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        });
+
         // Mobile Menu Toggle
         document.getElementById('menuToggle').addEventListener('click', function() {
             const nav = document.getElementById('mainNav');
